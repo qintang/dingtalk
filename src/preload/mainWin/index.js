@@ -4,6 +4,7 @@ import rememberMe from './rememberMe'
 import winOperation from './winOperation'
 import notifyMessage from './notifyMessage'
 import hubot from './hubot'
+import localstore from './localstore'
 import { ipcRenderer, webFrame } from 'electron'
 
 import './css.styl'
@@ -57,6 +58,10 @@ class MainWinInjector {
      */
     this.download()
     /**
+     * localstore,将浏览器的localstore发给主线程
+     */
+    this.localstore()
+    /**
      * hubot
      */
     this.hubot()
@@ -97,6 +102,14 @@ class MainWinInjector {
   download () {
     download(this)
   }
+
+  /**
+   *  localstore
+   */
+  localstore () {
+    localstore(this)
+  }
+
   /**
    * hook send msg
   */

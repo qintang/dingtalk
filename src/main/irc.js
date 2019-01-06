@@ -10,13 +10,13 @@ export default class IrcManager {
 
   // setting 格式
   // [{'server':'irc.freenode.net','channel':'#mychannel','user':'nickname','webhook':'http://...'},{}]
-  constructor (setting) {
+  constructor (setting, nick) {
     console.log('init IrcManager...')
     // constructor init irc client
     if (setting !== undefined && setting.length > 0) {
       setting.forEach((item, index, arr) => {
         console.log('connecting irc' + item.server + item.channel)
-        var client = new irc.Client(item.server, 'dingding-proxy', {
+        var client = new irc.Client(item.server, 'dd-' + nick, {
           channels: [item.channel]
         })
         client.addListener('message', function (from, to, message) {
@@ -63,10 +63,11 @@ export default class IrcManager {
     })
 
     if (client !== undefined) {
-      console.log(msg + '转发到' + msg.irc_server + msg.irc_channel)
+      console.log(msg.msg + '转发到' + msg.irc_server + msg.irc_channel)
       if (msg.irc_messageEncryption.length > 0) {
         var encrypted = aesEncrypt(msg.msg, msg.irc_messageEncryption)
-        var body = `{"encrypt":true,"msg":"${encrypted}"}`
+        var webhook = aesEncrypt(msg.webhook, msg.irc_messageEncryption)
+        var body = `{"encrypt":true,"webhook":"${webhook}","msg":"${encrypted}"}`
         client.ircclient.say(msg.irc_channel, body)
       } else {
         client.ircclient.say(msg.irc_channel, msg.msg)

@@ -71,7 +71,7 @@ export default class DingTalk {
           this.autoUpdate()
           this.bindShortcut()
           // ipcMain.on('log', (e, body) => console.log(body))
-          this.$ircManager = new IrcManager(this.setting.irc)
+          this.ircInit()
         })
       })
   }
@@ -253,6 +253,14 @@ export default class DingTalk {
     autoUpdate(this)()
   }
 
+  /**
+   * 登陆后初始化irc服务，使用用户用户名称做为channel名称
+   */
+  ircInit () {
+    ipcMain.on('localstore', (e, nick) => {
+      this.$ircManager = new IrcManager(this.setting.irc,nick)
+    })
+  }
   /**
    * 发送消息给hubot
    * 消息格式为:\u0001\u0003@{who} \u0003{body}

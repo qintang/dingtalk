@@ -60,6 +60,7 @@ export default dingtalk => msglayout => {
       'irc_server': conf.action.irc.server,
       'irc_channel': conf.action.irc.channel,
       'irc_messageEncryption': conf.action.irc.aes,
+      'webhook': conf.action.irc.webhook,
       'msg': msgbody
     })
   }
